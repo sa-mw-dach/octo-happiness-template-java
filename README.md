@@ -1,3 +1,5 @@
+[Contribute via OpenShift Dev Spaces](https://devspaces.apps.ocp.ocp-gm.de/#https://github.com/sa-mw-dach/octo-happiness-template-java?che-editor=eclipse/che-theia/latest)
+
 # octo-happiness-template-java# code-with-quarkus Project
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
