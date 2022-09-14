@@ -1,6 +1,6 @@
 deployment:
-    image: octo-happiness-java-template:1.0.0-SNAPSHOT
-    version: v1.0.0-test
+    image: octo-happiness-java-template
+    version: 1.0.0-SNAPSHOT
     replicas: 4
     includeHealthChecks: false
 
