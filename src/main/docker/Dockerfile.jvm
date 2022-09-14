@@ -7,18 +7,18 @@
 #
 # Then, build the image with:
 #
-# docker build -f src/main/docker/Dockerfile.jvm -t quarkus/code-with-quarkus-jvm .
+# docker build -f src/main/docker/Dockerfile.jvm -t quarkus/octo-happiness-template-java-jvm .
 #
 # Then run the container using:
 #
-# docker run -i --rm -p 8080:8080 quarkus/code-with-quarkus-jvm
+# docker run -i --rm -p 8080:8080 quarkus/octo-happiness-template-java-jvm
 #
 # If you want to include the debug port into your docker image
 # you will have to expose the debug port (default 5005) like this :  EXPOSE 8080 5005
 #
 # Then run the container using :
 #
-# docker run -i --rm -p 8080:8080 quarkus/code-with-quarkus-jvm
+# docker run -i --rm -p 8080:8080 quarkus/octo-happiness-template-java-jvm
 #
 # This image uses the `run-java.sh` script to run the application.
 # This scripts computes the command line to execute your Java application, and
@@ -75,10 +75,11 @@
 #   accessed directly. (example: "foo.example.com,bar.example.com")
 #
 ###
-FROM registry.access.redhat.com/ubi8/openjdk-17:1.11
+# olde: FROM registry.access.redhat.com/ubi8/openjdk-17:1.11 - new is from and arg
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.5
+ARG JAVA_PACKAGE=java-17-openjdk-headless
 
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en'
-
 
 # We make four distinct layers so if there are application changes the library layers can be re-used
 COPY --chown=185 target/quarkus-app/lib/ /deployments/lib/
@@ -90,4 +91,3 @@ EXPOSE 8080
 USER 185
 ENV JAVA_OPTS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
 ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
-

@@ -1,4 +1,4 @@
-package org.acme;
+package com.redhat;
 
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;

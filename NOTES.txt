@@ -1,0 +1,8 @@
+## Build and install this helm chart
+```bash
+$ helm upgrade -i octo-happiness-template-java
+```
+
+## Version history
+- 0.0.1 Initial release
+

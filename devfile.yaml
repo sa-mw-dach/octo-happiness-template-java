@@ -44,3 +44,12 @@ commands:
       group:
         kind: run
         isDefault: true
+  - id: 3-startdeploy
+    exec:
+     label: "Start Deploy"
+     component: tools
+     workingDir: ${PROJECTS_ROOT}
+     commandLine: "./mvnw clean package -Dquarkus.kubernetes.deploy=true"
+     group:
+       kind: run
+       isDefault: true
