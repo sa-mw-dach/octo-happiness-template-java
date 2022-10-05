@@ -1,22 +1,27 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
 metadata:
   annotations: 
     app.openshift.io/vcs-uri: 'https://github.com/sa-mw-dach/octo-happiness-template-java'
   labels:
     app: octo-happiness-template-java
-  name: {{ .Release.Name }}-deployment
+  name: {{ .Release.Name }}-deployment-config
 spec:
-  progressDeadlineSeconds: 600
   replicas: {{ .Values.deployment.replicas | default 1 }}
   selector:
-    matchLabels:
-      deployment: {{ .Release.Name }}
+    deployment: {{ .Release.Name }}
+  triggers:
+  - type: ConfigChange 
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - {{ .Values.deployment.image }}
+      from:
+        kind: ImageStreamTag
+        name: {{ .Values.deployment.image }}:{{ .Values.deployment.version }}
+    type: ImageChange  
   strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
+    type: Rolling      
   template:
     metadata:
       labels:
