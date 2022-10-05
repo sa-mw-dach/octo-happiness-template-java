@@ -1,51 +1,46 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: build-maven
+  name: build-via-dockerfile
 spec:
   finally:
-    - name: maven
+    - name: buildah
       params:
-        - name: MAVEN_IMAGE
-          value: image-registry.openshift-image-registry.svc:5000/$(context.pipelineRun.namespace)/{{ .Release.Name }}:latest
-        - name: GOALS
-          value:
-          - -Dquarkus.kubernetes.deploy=true
-          - clean
-          - package
-        - name: MAVEN_MIRROR_URL
-          value: ''
-        - name: SERVER_USER
-          value: ''
-        - name: SERVER_PASSWORD
-          value: ''
-        - name: PROXY_USER
-          value: ''
-        - name: PROXY_PASSWORD
-          value: ''
-        - name: PROXY_PORT
-          value: ''
-        - name: PROXY_HOST
-          value: ''
-        - name: PROXY_NON_PROXY_HOSTS
-          value: ''
-        - name: PROXY_PROTOCOL
-          value: http
-        - name: CONTEXT_DIR
+        - name: IMAGE
+          value: >-
+            image-registry.openshift-image-registry.svc:5000/$(context.pipelineRun.namespace)/octo-happiness-template-java:latest
+        - name: BUILDER_IMAGE
+          value: >-
+            registry.redhat.io/rhel8/buildah@sha256:0a86ecbdfbe86e9d225b7fe4b090a0dd6d323f8afdfdf2bd933ff223ddb53320
+        - name: STORAGE_DRIVER
+          value: vfs
+        - name: DOCKERFILE
+          value: Dockerfile
+        - name: CONTEXT
           value: .
+        - name: TLSVERIFY
+          value: 'true'
+        - name: FORMAT
+          value: oci
+        - name: BUILD_EXTRA_ARGS
+          value: ''
+        - name: PUSH_EXTRA_ARGS
+          value: ''
+        - name: SKIP_PUSH
+          value: 'false'
       taskRef:
         kind: ClusterTask
-        name: maven
+        name: buildah
       workspaces:
         - name: source
           workspace: source
-        - name: maven-settings
-          workspace: maven-settings
   tasks:
     - name: git-clone
       params:
         - name: url
-          value: {{ .Values.git.url }}
+          value: 'https://github.com/sa-mw-dach/octo-happiness-template-java.git'
+        - name: revision
+          value: main
         - name: submodules
           value: 'true'
         - name: depth
@@ -69,6 +64,28 @@ spec:
       workspaces:
         - name: output
           workspace: source
+    - name: package
+      params:
+        - name: MAVEN_IMAGE
+          value: >-
+            image-registry.openshift-image-registry.svc:5000/openshift/java:latest
+        - name: GOALS
+          value:
+            - package
+        - name: PROXY_PROTOCOL
+          value: http
+        - name: CONTEXT_DIR
+          value: .
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: ClusterTask
+        name: maven
+      workspaces:
+        - name: source
+          workspace: source
+        - name: maven-settings
+          workspace: maven-settings
   workspaces:
     - name: source
       optional: false
