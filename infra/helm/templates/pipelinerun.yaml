@@ -1,0 +1,33 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: {{ .Release.Name }}-build-2
+  labels:
+    tekton.dev/pipeline: build-maven
+  namespace: octo-happiness
+spec:
+  pipelineRef:
+    name: build-maven
+  params:
+    - name: git-url
+      value: {{ .Values.git.url }}
+    - name: git-revision
+      value: main
+    - name: context-dir
+      value: the-source
+    - name: image-name
+      value: >-
+        "image-registry.openshift-image-registry.svc:5000/octo-happiness/{{ .Values.deployment.image }}"
+    - name: target-namespace
+      value: octo-happiness
+    - name: release-version
+      value: 1.2.3
+  serviceAccountName: pipeline-bot
+  timeout: 0h30m0s
+  workspaces:
+    - name: source
+      persistentVolumeClaim:
+        claimName: builder-pvc-2
+    - configMap:
+        name: maven-settings
+      name: maven-settings
