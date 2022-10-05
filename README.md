@@ -22,7 +22,7 @@ quarkus dev
 
 1. Login to your oc cli
 1. Navigate to the infra/helm folder and run
-1. ```helm upgrade -i octo-happiness-template-java .```
+1. ```helm upgrade -i octo-happiness-template-java infra/helm```
 
 ## Uninstall
 
