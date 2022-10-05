@@ -2,57 +2,36 @@
 
 # octo-happiness-template-java# octo-happiness-template-java Project
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
-
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+This project shows an easy to use and full install of an application pipeline and deployment via helm.
 
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
-```shell script
+```bash
 ./mvnw compile quarkus:dev
+```
+
+or via quarkus cli, just run 
+```bash
+quarkus dev
 ```
 
 > **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
 
 ## Packaging and running the application
 
-The application can be packaged using:
-```shell script
-./mvnw package
-```
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+1. Login to your oc cli
+1. Navigate to the infra/helm folder and run
+1. ```helm upgrade -i octo-happiness-template-java .```
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+## Uninstall
 
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
+You can uninstall the installed helm chart via
+```bash
+helm uninstall octo-happiness-template-java 
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using: 
-```shell script
-./mvnw package -Pnative
+Afterwards you will have do delete the pvc manually 
+```bash
+oc delete pvc builder-pvc-2
 ```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./mvnw package -Pnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/octo-happiness-template-java-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
-
-## Provided Code
-
-### RESTEasy Reactive
-
-Easily start your Reactive RESTful Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
