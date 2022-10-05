@@ -1,9 +1,11 @@
 deployment:
     image: octo-happiness-java-template
     version: 1.0.0-SNAPSHOT
-    replicas: 4
+    replicas: 1
     includeHealthChecks: false
 
 config:
     greeting: 'Hello World.'
 
+git:
+    url: https://github.com/sa-mw-dach/octo-happiness-template-java.git

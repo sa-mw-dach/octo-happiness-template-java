@@ -1,6 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  annotations: 
+    app.openshift.io/vcs-uri: 'https://github.com/sa-mw-dach/octo-happiness-template-java'
   labels:
     app: octo-happiness-template-java
   name: {{ .Release.Name }}-deployment
