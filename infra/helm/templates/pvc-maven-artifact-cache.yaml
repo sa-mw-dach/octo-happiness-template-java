@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: builder-pvc-2
+  name: builder-maven-pvc
   annotations:
     "helm.sh/resource-policy": keep
 spec:
