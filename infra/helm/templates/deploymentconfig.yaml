@@ -15,10 +15,10 @@ spec:
   - imageChangeParams:
       automatic: true
       containerNames:
-      - {{ .Values.deployment.image }}
+      - {{ include "app.fullname" . }}
       from:
         kind: ImageStreamTag
-        name: {{ .Values.deployment.image }}:{{ .Values.deployment.version }}
+        name: "{{ include "app.fullname" . }}:{{ .Chart.AppVersion }}"
     type: ImageChange  
   strategy:
     type: Rolling      
@@ -28,7 +28,7 @@ spec:
         {{- include "app.defaultLabels" . | indent 8 }}
     spec:
       containers:
-        - image: "{{ .Values.deployment.image }}:{{ .Values.deployment.version }}"
+        - image: "{{ include "app.fullname" . }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: IfNotPresent
           name: octo-happiness-template-java
           ports:

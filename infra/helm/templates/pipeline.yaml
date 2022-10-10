@@ -8,7 +8,7 @@ spec:
       params:
         - name: IMAGE
           value: >-
-            image-registry.openshift-image-registry.svc:5000/$(context.pipelineRun.namespace)/octo-happiness-template-java:latest
+            image-registry.openshift-image-registry.svc:5000/$(context.pipelineRun.namespace)/{{ include "app.fullname" . }}:$(params.appversion)
         - name: BUILDER_IMAGE
           value: >-
             registry.redhat.io/rhel8/buildah@sha256:0a86ecbdfbe86e9d225b7fe4b090a0dd6d323f8afdfdf2bd933ff223ddb53320
@@ -64,14 +64,15 @@ spec:
       workspaces:
         - name: output
           workspace: source
-    - name: package
+    - name: set-version
       params:
         - name: MAVEN_IMAGE
           value: >-
             image-registry.openshift-image-registry.svc:5000/openshift/java:latest
         - name: GOALS
           value:
-            - package
+            - versions:set
+            - -DnewVersion=${params.appversion}
         - name: PROXY_PROTOCOL
           value: http
         - name: CONTEXT_DIR
@@ -86,10 +87,36 @@ spec:
           workspace: source
         - name: maven-settings
           workspace: maven-settings
+    - name: package
+      params:
+        - name: MAVEN_IMAGE
+          value: >-
+            image-registry.openshift-image-registry.svc:5000/openshift/java:latest
+        - name: GOALS
+          value:
+            - package
+        - name: PROXY_PROTOCOL
+          value: http
+        - name: CONTEXT_DIR
+          value: .
+      runAfter:
+        - set-version
+      taskRef:
+        kind: ClusterTask
+        name: maven
+      workspaces:
+        - name: source
+          workspace: source
+        - name: maven-settings
+          workspace: maven-settings
   workspaces:
     - name: source
       optional: false
     - name: maven-settings
       optional: false
-  params: []
+  params:
+    - default: 1.0.0-SNAPSHOT
+      description: The version of the application
+      name: appversion
+      type: string
   resources: []
