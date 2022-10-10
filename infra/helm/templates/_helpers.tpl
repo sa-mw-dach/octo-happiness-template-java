@@ -15,3 +15,19 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{/* Default Labels: Helm recommended best-practice labels https://helm.sh/docs/chart_best_practices/labels/ */}}
+{{- define "app.defaultLabels" }}
+app.kubernetes.io/name: {{ include "app.fullname" . }}
+app.kubernetes.io/namespace: {{ .Release.Namespace }}
+helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/version: {{ .Chart.Version }}
+app.kubernetes.io/app-version: {{ .Chart.AppVersion }}
+{{- end -}}
+
+{{- define "app.matchLabels" }}
+app.kubernetes.io/name: {{ include "app.fullname" . }}
+app.kubernetes.io/namespace: {{ .Release.Namespace }}
+{{- end -}}
