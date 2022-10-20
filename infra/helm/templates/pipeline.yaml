@@ -26,8 +26,8 @@ spec:
           value: ''
         - name: PUSH_EXTRA_ARGS
           value: ''
-        - name: SKIP_PUSH
-          value: 'false'
+#        - name: SKIP_PUSH
+#          value: 'false'
       taskRef:
         kind: ClusterTask
         name: buildah
@@ -47,8 +47,8 @@ spec:
           value: '1'
         - name: sslVerify
           value: 'true'
-        - name: crtFileName
-          value: ca-bundle.crt
+#        - name: crtFileName
+#          value: ca-bundle.crt
         - name: deleteExisting
           value: 'true'
         - name: verbose
