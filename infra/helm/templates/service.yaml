@@ -6,10 +6,9 @@ metadata:
   name: {{ .Release.Name }}-service
 spec:
   ports:
-  - name: 8080-tcp
+  - name: main
     port: 8080
     protocol: TCP
-    targetPort: 8080
   selector:
     {{- include "app.matchLabels" . | indent 8 }}
   sessionAffinity: None

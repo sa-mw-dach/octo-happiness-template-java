@@ -6,7 +6,7 @@ metadata:
   name: {{ .Release.Name }}-route
 spec:
   port:
-    targetPort: 8080-tcp
+    targetPort: main
   to:
     kind: Service
     name: {{ .Release.Name }}-service
